@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,40 +16,57 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final questions = const [
+  final _questions = const [
     // 'What\'s your favourite color?',
     // 'What\'s your favourite animal?',
 
     {
       'questionText': 'What\'s your favourite color?',
-      'answers': ['Black', 'Red', 'Green', 'White'],
+      'answers': [
+        {'text': 'Black', 'score': 10},
+        {'text': 'Red', 'score': 6},
+        {'text': 'Green', 'score': 4},
+        {'text': 'White', 'score': 1},
+      ],
     },
     {
       'questionText': 'What\'s your favourite animal?',
-      'answers': ['Rabit', 'Snake', 'Lion', 'Cat'],
+      'answers': [
+        {'text': 'Rabit', 'score': 7},
+        {'text': 'Snake', 'score': 10},
+        {'text': 'Lion', 'score': 6},
+        {'text': 'Cat', 'score': 2},
+      ],
     },
     {
       'questionText': 'What\'s your favourite car?',
-      'answers': ['Gentra', 'GTR34', 'Supra', 'Taycan'],
+      'answers': [
+        {'text': 'Gentra', 'score': 10},
+        {'text': 'Supra', 'score': 3},
+        {'text': 'GTR34', 'score': 3},
+        {'text': 'Taycan', 'score': 2},
+      ],
     },
   ];
 
   var _questionIndex = 0;
+  // var _totalScore = 0;
 
   void _answerQuestion() {
     // var aBool = true;
     // aBool = false;
-    if (_questionIndex < questions.length) {
-      print('We have more questions!');
-    } else {
-      print('No more questions!');
-    }
+
+    // _totalScore = _totalScore + score;
 
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
-
     print(_questionIndex);
+    if (_questionIndex < _questions.length) {
+      print('We have more questions!');
+    } else {
+      print('No more questions!');
+    }
   }
 
   @override
@@ -59,21 +76,13 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('My First App'),
         ),
-        body: _questionIndex < questions.length
-            ? Column(
-                children: [
-                  Question(
-                    (questions[_questionIndex]['questionText'] as String),
-                  ),
-                  ...(questions[_questionIndex]['answers'] as List<String>)
-                      .map((answer) {
-                    return Answer(_answerQuestion, answer);
-                  }).toList()
-                ],
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex,
+                questions: _questions,
               )
-            : Center(
-                child: Text('You did it'),
-              ),
+            : Result(),
       ),
     );
   }
